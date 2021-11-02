@@ -2,9 +2,6 @@ defmodule G.Settings do
   alias ExJsonSchema.Validator
   alias G.Utils.Json
 
-  @json_schema_path "lib/settings/settings_schema.json"
-  @json_settings_path "settings.json"
-
   def get(schema_path, settings_path) do
     schema_path
     |> load_json_schema()
@@ -13,12 +10,13 @@ defmodule G.Settings do
 
   defp load_settings({:error, error} = _schema, _), do: {:error, error}
 
-  defp load_settings(schema, path) do
+  defp load_settings({:ok, schema} = _schema, path) do
     path
     |> Json.load_json()
     |> case do
       {:ok, settings} ->
         schema
+        |> ExJsonSchema.Schema.resolve()
         |> Validator.validate(settings)
         |> case do
           :ok -> {:ok, settings}
