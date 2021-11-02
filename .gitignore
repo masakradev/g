@@ -24,3 +24,6 @@ g-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# Sample settinngs
+settings.json
